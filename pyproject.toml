@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scholarnexus"
+version = "1.0.0"
+description = "Budget-aware academic paper search with executable constraints and F1-optimal set selection"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "requests>=2.28", "PyYAML>=6.0"]
+
+[project.optional-dependencies]
+local = ["sentence-transformers>=2.2"]
+# Evaluation-only tooling.  It is intentionally optional: production PaSa
+# retrieval remains local/offline and does not import either package.
+ir = ["ir-measures>=0.3", "ranx>=0.3"]
+
+[project.scripts]
+scholarnexus = "scholarnexus.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["scholarnexus*"]
+
+[tool.setuptools.package-data]
+scholarnexus = ["web/*.html"]

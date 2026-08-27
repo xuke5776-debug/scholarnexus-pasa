@@ -1,0 +1,32 @@
+__pycache__/
+*.py[cod]
+.sn_cache/
+.pc_cache/
+*.egg-info/
+build/
+dist/
+.env
+docs/eval/
+tmp/
+data/pasa/
+
+# Local corpora, indexes, model weights, virtual environments, and run caches.
+# These are restored separately and must not be committed to the source repo.
+.venv*/
+data/pasa/*.sqlite
+data/pasa/**/*.sqlite
+data/pasa/**/*.npy
+data/pasa/**/*.npz
+data/pasa/**/*.f16
+data/pasa/**/*.vectors
+data/models/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.tar.gz
+*.joblib
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
