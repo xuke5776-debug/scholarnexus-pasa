@@ -1,0 +1,49 @@
+{
+  "profile": "offline",
+  "cache_path": "F:/pasa_compare_20260828/cache/pasa_p2_query_adapter025_cpu_experiment.sqlite",
+  "reranker": {"backend": "lexical"},
+  "sources": {
+    "openalex": {"enabled": false}, "s2": {"enabled": false},
+    "arxiv": {"enabled": false}, "pubmed": {"enabled": false, "email": ""},
+    "pasa": {
+      "enabled": true, "index_path": "data/pasa/papers.sqlite",
+      "paper_zip": "E:/新的codex工作区/_review_20260819/official_reference_data/PaSa/paper_database/cs_paper_2nd.zip",
+      "id_map": "E:/新的codex工作区/_review_20260819/official_reference_data/PaSa/paper_database/id2paper.json",
+      "reference_hydrate_limit": 8,
+      "section_selector_path": "data/pasa/pasa_crawler_section_selector_hash.joblib",
+      "section_selector_min_score": 0.0,
+      "section_cited_title_weight": 0.70, "section_cited_title_top_k": 8,
+      "max_search_limit": 2000
+    },
+    "pasa_local_dense": {
+      "enabled": true, "index_dir": "data/pasa/local_minilm_biencoder_v1_full",
+      "paper_db": "data/pasa/papers.sqlite",
+      "model_path": "data/models/pasa_sft_minilm_biencoder_v1",
+      "device": "cpu", "search_device": "cpu", "block_size": 8192,
+      "query_batch_size": 1,
+      "query_adapter_path": "F:/pasa_compare_20260828/pasa_query_adapter_train1024_val32_20260829.adapter.pt",
+      "query_adapter_mix": 0.25
+    }
+  },
+  "pipeline": {
+    "max_rounds": 1, "per_query_limit": 500, "l1_keep": 1000,
+    "l1_channel_quotas": {
+      "lexical:pasa:abstract": 180, "lexical:pasa:title_abstract": 180,
+      "lexical:pasa:all_fields": 180, "cite_bwd_section": 120
+    },
+    "l2_input_keep": 150, "l2_keep": 150,
+    "citation_expand_seeds": 4, "citation_expand_limit": 40,
+    "citation_section_max_sections": 2, "citation_seed_min_constraint": 0.42,
+    "citation_graph_min_constraint": 0.42, "l3_policy": "disabled",
+    "max_l3_judgments": 0, "enable_query_evolution": false,
+    "use_propensity": false, "calibrator": "rank_decay",
+    "n_hat_prior_override": 5, "n_hat_prior_sd": 2,
+    "raw_query_dense_sources": ["pasa_local_dense"], "raw_query_dense_limit": 2000,
+    "candidate_audit": true,
+    "agentic_controller": {
+      "enabled": true, "dense_always": true, "admission_max_keep": 1000,
+      "widen_if_overlap_below": 0.72, "widen_if_pool_above": 1000,
+      "skip_citation_types": ["locate"]
+    }
+  }
+}
