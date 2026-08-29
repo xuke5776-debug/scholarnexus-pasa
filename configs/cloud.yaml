@@ -1,0 +1,57 @@
+# 商业 API 档位（初赛主用）。Key 一律从环境变量读取，绝不写进文件。
+#   export DASHSCOPE_API_KEY=sk-xxx
+#   export OPENALEX_MAILTO=you@example.com
+profile: cloud
+
+llm_fast:
+  backend: openai_compat
+  model: qwen-flash                # 便宜快，用于查询解析与检索式演化
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key_env: DASHSCOPE_API_KEY
+  max_tokens: 1200
+
+llm_judge:
+  backend: openai_compat
+  model: qwen-plus                 # 判别力优先，用于 L3 约束核验
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key_env: DASHSCOPE_API_KEY
+  max_tokens: 2000
+
+reranker:
+  backend: qwen
+  model: qwen3-rerank               # 与查询规划共用一个 DashScope Key
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key_env: DASHSCOPE_API_KEY
+
+embedding:
+  backend: api
+  model: text-embedding-v3
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  api_key_env: DASHSCOPE_API_KEY
+  dim: 1024
+
+sources:
+  openalex: {enabled: true, mailto_env: OPENALEX_MAILTO}
+  s2:       {enabled: true, api_key_env: S2_API_KEY}
+  arxiv:    {enabled: true}
+  pubmed:   {enabled: false}       # 跨学科泛化验证时打开
+
+pipeline:
+  # 默认只做一轮主召回 + 引文扩散；已证明收益后才打开查询演化。
+  max_rounds: 2
+  per_query_limit: 20
+  l1_keep: 220
+  l2_keep: 80
+  max_l3_judgments: 12
+  l3_batch_size: 6
+  l3_policy: disabled             # 真实开发集证明收益后改为 adaptive
+  l3_min_voi: 0.004
+  l3_max_papers: 12
+  enable_query_evolution: false
+  citation_expand_seeds: 6
+  citation_expand_limit: 40
+  target_coverage: 0.85
+  core_ratio: 1.25
+  use_propensity: true
+  calibrator: mixture              # 可选 mixture+temper / rank_decay
+  supervised_calibrator_path: ""  # 仅加载开发集拟合模型，禁止用测试集训练
