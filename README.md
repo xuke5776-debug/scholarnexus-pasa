@@ -75,16 +75,34 @@ python -m scholarnexus.cli "你的复杂学术查询" --profile cloud --trace
 使用 `qwen-plus`，三者共用一个 DashScope Key。如果相关服务不可用，相应层会独立
 降级并在结果账本记录，密钥不会写进缓存和输出。
 
-## 公开 SPAR 评测
+## 数据与公开 SPAR 评测
+
+GitHub 仓库只保存可审计的程序、配置、文档和小型 fixture，不保存官方数据、论文库、索引、向量或模型权重。官方 PaSa 数据的权威镜像在
+`https://huggingface.co/buckets/XK2026/pasa-dataset-bucket`。远程 Work 或新机器应先按
+[`docs/REPRODUCE_HF.md`](docs/REPRODUCE_HF.md) 恢复数据，再运行评测。
+
+最小恢复示例（源码包中也包含同一脚本）：
+
+```bash
+mkdir -p official_reference_data/PaSa/AutoScholarQuery
+curl -L --fail --output official_reference_data/PaSa/AutoScholarQuery/train.jsonl \
+  'https://huggingface.co/buckets/XK2026/pasa-dataset-bucket/resolve/AutoScholarQuery/train.jsonl?download=true'
+python scripts/recover_pasa_autoscholar_train.py \
+  --repo XK2026/pasa-dataset-bucket \
+  --filename AutoScholarQuery/train.jsonl \
+  --out official_reference_data/PaSa/AutoScholarQuery/train.recovered.jsonl
+```
+
+恢复 dev/test 与论文库后，公开评测命令为：
 
 ```bash
 python scripts/run_public.py \
-  --data benchmarks/public/AutoScholarQuery_test.jsonl \
-  --profile cloud --offset 0 --limit 100 \
+  --data official_reference_data/PaSa/AutoScholarQuery/test.jsonl \
+  --profile cloud --offset 0 --limit 1000 \
   --api-budget 8 --llm-budget 2
 ```
 
-评测优先使用 arXiv ID，其次使用规范化标题精确匹配；不会用模糊标题匹配抬高成绩。
+评测优先使用严格 arXiv ID，其次使用规范化标题精确匹配；不会用模糊标题匹配抬高成绩。
 
 ## 可选监督校准
 
