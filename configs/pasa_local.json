@@ -1,0 +1,29 @@
+{
+  "profile": "cloud",
+  "reranker": {"backend": "lexical"},
+  "sources": {
+    "openalex": {"enabled": true, "mailto_env": "OPENALEX_MAILTO"},
+    "s2": {"enabled": false, "api_key_env": "S2_API_KEY"},
+    "arxiv": {"enabled": false},
+    "pubmed": {"enabled": false, "email": ""},
+    "pasa": {
+      "enabled": true,
+      "index_path": "data/pasa/papers.sqlite",
+      "paper_zip": "E:/新的codex工作区/_review_20260819/official_reference_data/PaSa/paper_database/cs_paper_2nd.zip",
+      "id_map": "E:/新的codex工作区/_review_20260819/official_reference_data/PaSa/paper_database/id2paper.json"
+    }
+  },
+  "pipeline": {
+    "max_rounds": 1,
+    "per_query_limit": 30,
+    "l1_keep": 120,
+    "l2_keep": 80,
+    "l3_policy": "disabled",
+    "max_l3_judgments": 0,
+    "enable_query_evolution": false,
+    "use_propensity": false,
+    "calibrator": "rank_decay",
+    "n_hat_prior_override": 3,
+    "n_hat_prior_sd": 2
+  }
+}
