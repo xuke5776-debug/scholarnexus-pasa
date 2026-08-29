@@ -1,0 +1,31 @@
+# 本地部署档位（决赛演示与私有化交付）。
+# 启动三个 vLLM/TEI 服务后直接切换，业务代码一行不改。
+#   vllm serve Qwen/Qwen3-4B-Instruct        --port 8000
+#   vllm serve Qwen/Qwen3-32B-Instruct       --port 8001
+#   vllm serve Qwen/Qwen3-Embedding-0.6B     --port 8002 --task embed
+profile: local
+
+llm_fast:
+  backend: openai_compat
+  model: Qwen3-4B-Instruct
+  base_url: http://127.0.0.1:8000/v1
+llm_judge:
+  backend: openai_compat
+  model: Qwen3-32B-Instruct
+  base_url: http://127.0.0.1:8001/v1
+  timeout: 120
+embedding:
+  backend: api
+  model: Qwen3-Embedding-0.6B
+  base_url: http://127.0.0.1:8002/v1
+reranker:
+  backend: local                   # sentence-transformers 直接加载权重
+  model: BAAI/bge-reranker-v2-m3
+
+pipeline:
+  max_rounds: 2
+  max_l3_judgments: 12
+  l3_policy: disabled
+  l3_min_voi: 0.004
+  l3_max_papers: 12
+  enable_query_evolution: false

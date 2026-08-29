@@ -1,0 +1,20 @@
+{
+  "profile": "cloud",
+  "reranker": {"backend": "lexical"},
+  "sources": {
+    "openalex": {"enabled": true, "mailto_env": "OPENALEX_MAILTO"},
+    "s2": {"enabled": false, "api_key_env": "S2_API_KEY"},
+    "arxiv": {"enabled": false},
+    "pubmed": {"enabled": false, "email": ""}
+  },
+  "pipeline": {
+    "max_rounds": 1,
+    "per_query_limit": 20,
+    "l1_keep": 80,
+    "l2_keep": 80,
+    "l3_policy": "disabled",
+    "max_l3_judgments": 0,
+    "enable_query_evolution": false,
+    "use_propensity": false
+  }
+}
