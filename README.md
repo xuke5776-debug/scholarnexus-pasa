@@ -55,10 +55,11 @@ python -m scholarnexus.cli \
 启动 Web 界面：
 
 ```bash
-SN_CORPUS=data/fixture/corpus.jsonl python -m scholarnexus.server --profile offline
+SN_CORPUS=data/fixture/corpus.jsonl python -m scholarnexus.server --profile offline --port 8090
 ```
 
-浏览器打开 `http://127.0.0.1:8080`。
+浏览器打开 `http://127.0.0.1:8090`。页面提供查询理解、F1-Gate 输出决策、
+约束满足矩阵、引文关系图、执行链路和成本账本；顶部快捷查询可直接演示完整检索流程。
 
 ## 千问配置
 
